@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"> </script>
+<script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [['$','$'], ['\\(','\\)']]}});</script>
+<script type="text/x-mathjax-config">MathJax.Hub.Config({"HTML-CSS": {"availableFonts":["TeX"],"scale": 150}});</script>
+
+<style>
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: "Segoe WPC", "Segoe UI", "SFUIText-Light", "HelveticaNeue-Light", sans-serif, "Droid Sans Fallback";
+	font-size: 14px;
+	padding: 0 12px;
+	line-height: 22px;
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	color: #4080D0;
+	text-decoration: none;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+h1 code,
+h2 code,
+h3 code,
+h4 code,
+h5 code,
+h6 code {
+	font-size: inherit;
+	line-height: auto;
+}
+
+a:hover {
+	color: #4080D0;
+	text-decoration: underline;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left: 5px solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 14px;
+	line-height: 19px;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+.mac code {
+	font-size: 12px;
+	line-height: 18px;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+/** Theming */
+
+.vscode-light,
+.vscode-light pre code {
+	color: rgb(30, 30, 30);
+}
+
+.vscode-dark,
+.vscode-dark pre code {
+	color: #DDD;
+}
+
+.vscode-high-contrast,
+.vscode-high-contrast pre code {
+	color: white;
+}
+
+.vscode-light code {
+	color: #A31515;
+}
+
+.vscode-dark code {
+	color: #D7BA7D;
+}
+
+.vscode-light pre:not(.hljs),
+.vscode-light code > div {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre:not(.hljs),
+.vscode-dark code > div {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre:not(.hljs),
+.vscode-high-contrast code > div {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+.vscode-light blockquote,
+.vscode-dark blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.vscode-high-contrast blockquote {
+	background: transparent;
+	border-color: #fff;
+}
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+</style>
+
+</head>
+<body>
+<h1 id="%E4%B8%80%E8%B7%AF%E5%8E%86%E7%A8%8B%E6%A6%82%E8%A6%81%E5%9B%9E%E9%A1%BE">一路历程概要回顾</h1>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>事情概要</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>浪费一年半时间与精力花费22万惊扰亲戚订了个婚造了个娃被踹后打了个官司，追回10万，对方如愿以偿得到一个孩子，一路历程概要：</td>
+</tr>
+<tr>
+<td>2</td>
+<td>双方从2019年2月1日的亲戚关系开始相亲</td>
+</tr>
+<tr>
+<td>3</td>
+<td>2019年3月24日我方第一次被对方拒绝</td>
+</tr>
+<tr>
+<td>4</td>
+<td>2020年~2021年对方母亲一直坚持不懈屡次找我方母亲想跟我方结亲</td>
+</tr>
+<tr>
+<td>5</td>
+<td>2019年我方被对方拒绝后一直不愿意再主动接触，我方母亲多次劝说无果，只好屡次推脱对方的好意</td>
+</tr>
+<tr>
+<td>6</td>
+<td>没想到对方一直不放弃，直到2021年8月的某天，对方声称早已在心里把我方当自己儿子了，第一眼看到就好喜欢，早就看中了</td>
+</tr>
+<tr>
+<td>7</td>
+<td>我方大为震惊，深受感动，也感受到了为人母的不易，但碍于之前被拒，我方仍没自信主动找对方聊天</td>
+</tr>
+<tr>
+<td>8</td>
+<td>我方迟迟未找对方聊天，于是自2021年10月31日开始，对方据说是在其母亲的逼迫下开始三番五次主动找我方聊天，且言辞诚恳，早已没有2019年第一次接触时的心高气傲</td>
+</tr>
+<tr>
+<td>9</td>
+<td>鉴于对方的低姿态，我方本着“你对我有意，我就钟情于你”的态度再次与对方主动热聊起来</td>
+</tr>
+<tr>
+<td>10</td>
+<td>聊天很稀松平常，没有什么深度，且未再像前2年第一次接触时那样说工作、聊日常，一些实际问题也未提及过，但对方并没有因为她所奉行的“及时止损”恋爱观而终止</td>
+</tr>
+<tr>
+<td>11</td>
+<td>2022年1月25日，两家人碰面，双方母亲稀里糊涂敲定下见面礼的日子，双方因此正式确定男女朋友关系，并下定决心一辈子在一起不分开</td>
+</tr>
+<tr>
+<td>12</td>
+<td>媒妁之约指定媒人后对方并未提及过要多少彩礼，礼节什么规格，全靠我方自由发挥</td>
+</tr>
+<tr>
+<td>13</td>
+<td>2022年1月27日前后，我方给付第一阶段的礼金14万</td>
+</tr>
+<tr>
+<td>14</td>
+<td>2022年2月5日购买五金首饰34566元</td>
+</tr>
+<tr>
+<td>15</td>
+<td>2022年2月6日接过门，并确定年底结婚</td>
+</tr>
+<tr>
+<td>16</td>
+<td>2022年2月14~2022年7月3日，异地恋，日常聊天“亲爱的，老婆，宝贝”怎么亲热怎么叫，因疫情受阻，一直未曾相聚</td>
+</tr>
+<tr>
+<td>17</td>
+<td>2022年7月4日回家培养感情并计划怀孕</td>
+</tr>
+<tr>
+<td>18</td>
+<td>2022年7月4日~2022年7月22日，期间大概有一半时间在一起生活，发生了一些我方当时根本没意识到那能算是矛盾的矛盾，且对方埋在心里不沟通，我方曾询问过“为什么不让留宿、为什么不去我家&quot;等问题，对方从来都是闭口不提</td>
+</tr>
+<tr>
+<td>19</td>
+<td>2022年7月22日最后一次相处，2022年7月23日双方分别后各待各家</td>
+</tr>
+<tr>
+<td>20</td>
+<td>2022年7月31日双方缺乏沟通，加上一些误会，矛盾爆发</td>
+</tr>
+<tr>
+<td>21</td>
+<td>我方母子二人卑微求和</td>
+</tr>
+<tr>
+<td>22</td>
+<td>对方母女二人不依不饶</td>
+</tr>
+<tr>
+<td>23</td>
+<td>我方辱不还口继续求和</td>
+</tr>
+<tr>
+<td>24</td>
+<td>对方言语侮辱继续长篇大论越演越烈</td>
+</tr>
+<tr>
+<td>25</td>
+<td>我方身心俱疲仍尝试解释、沟通</td>
+</tr>
+<tr>
+<td>26</td>
+<td>对方耍心机假装热情自以为很高明的诱导、一步步催促我方说出到底花了些什么钱</td>
+</tr>
+<tr>
+<td>27</td>
+<td>我方当时还没开始说时，早已识破对方是想套我方“列清单”、“开始算账”的证据，我方当时心情很复杂甚至有点恼火；为驳斥对方长篇大论所说的空口无凭画饼，在复杂心情的加持下，我方如对方所愿道出部分花销；并在微信上做了记录“猜测对方明天肯定会指责我开始列清单了”；</td>
+</tr>
+<tr>
+<td>28</td>
+<td>果然，2022年8月4日，对方计谋得逞第二天急忙跑到娘家撇清责任，说我方已经开始列清单算账了，至此事情已到很难挽回的地步，我方心里已没底</td>
+</tr>
+<tr>
+<td>29</td>
+<td>2022年8月5日，我方带媒人上门说和，过程持续一个多小时</td>
+</tr>
+<tr>
+<td>30</td>
+<td>说和期间媒人说一句对方反驳一句不听媒人调和，势要与媒人论输赢，一家人也根本没有想和解的态度</td>
+</tr>
+<tr>
+<td>31</td>
+<td>说和快结束时对方问我方要手机，看到我方在录音</td>
+</tr>
+<tr>
+<td>32</td>
+<td>对方大惊，哭天喊地矛盾进一步激化</td>
+</tr>
+<tr>
+<td>33</td>
+<td>我方噤若寒蝉连忙下跪安抚对方</td>
+</tr>
+<tr>
+<td>34</td>
+<td>对方以为抓住录音把柄从此更不依不饶，已到不可收拾的地步</td>
+</tr>
+<tr>
+<td>35</td>
+<td>不久对方母亲约见我方母亲，继续数落我方的种种不是，告知我方母亲已无可能了，并转告对方说过的话“以后再嫁人别人要嫌弃我，那也没办法”</td>
+</tr>
+<tr>
+<td>36</td>
+<td>为表重视程度我方父亲1400公里坐火车回家，请求见面求和，对方避而不见并在后面彻底撕破脸时说风凉话“晓得到屋来是做么事哦”</td>
+</tr>
+<tr>
+<td>37</td>
+<td>我方父亲致电对方父亲得到的答复是没有可能了</td>
+</tr>
+<tr>
+<td>38</td>
+<td>不久对方母亲约见我方父母，告知我方父母对方已怀孕，并催促我方赶紧去找别人结婚，声称对方不可能再嫁给我方</td>
+</tr>
+<tr>
+<td>39</td>
+<td>我方父母，有苦无处诉说，情绪一度崩溃</td>
+</tr>
+<tr>
+<td>40</td>
+<td>对方的态度，亲戚并不知情，双方亲戚奉劝先冷静</td>
+</tr>
+<tr>
+<td>41</td>
+<td>冷静期间我方不间断给对方发信息表达想缓和关系的意愿</td>
+</tr>
+<tr>
+<td>42</td>
+<td>对方视而不见，从来都不回复</td>
+</tr>
+<tr>
+<td>43</td>
+<td>冷静期间我方曾致电对方母亲询问情况并继续解释一些误会表达求和态度</td>
+</tr>
+<tr>
+<td>44</td>
+<td>对方母亲态度坚决仍在电话里数落我方各种不是，并告诫我方以后勿要再打扰对方（不然命会没的）</td>
+</tr>
+<tr>
+<td>45</td>
+<td>在对方丝毫不理睬的情况下我方依然坚持发信息请求原谅也曾提及孩子</td>
+</tr>
+<tr>
+<td>46</td>
+<td>2022年9月6日中秋节，我方微信转账给对方9999.99元，请求对方帮忙打点中秋礼节，对方未领取</td>
+</tr>
+<tr>
+<td>47</td>
+<td>2022年9月7日对方再次发给我方一段长篇大论正面提出悔婚，警告我方勿要再纠缠才能落得体面，且里面还提到“后续你要来算账，你来，我也有要跟你算的”，言辞侮辱之意，是可忍孰不可忍</td>
+</tr>
+<tr>
+<td>48</td>
+<td>自此，我方幻想破灭，一改前态不再卑微忍让，开始言语反击，无比失望的跟对方说道“从此以后，你不再是我的什么人”，并于9月15日要求对方退还彩礼</td>
+</tr>
+<tr>
+<td>49</td>
+<td>对方又是哭天喊地拒绝退还彩礼，且扬言索赔青春损失费并于2022年9月19日拉黑我方微信，拉黑之前对方说了最后一句话“我的损失也不可能就这么算了的”</td>
+</tr>
+<tr>
+<td>50</td>
+<td>2023年1月，临近春节，媒人作为我方亲戚，事情未解决也替我方着急，媒人在与我方母亲商量后致电对方欲协商解决问题，甚至准备跟对方说要接人(就是结婚）</td>
+</tr>
+<tr>
+<td>51</td>
+<td>结果媒人还未开口说事，就被对方母亲回怼，对方拒绝协商，钱一分不肯退，且态度坚决，仍扬言索赔青春损失费</td>
+</tr>
+<tr>
+<td>52</td>
+<td>我方在得知媒人居然试图说要“接人”过后，于2023年1月25日发了一篇《和瑞昌二中某老师的孽缘》一文告知部分亲戚，全面阐述了事情的前因后果以及强调了自2022年中秋节过后我方就已经彻底被分手，不需要再说要“接人”之类的假话，直接就是要退钱或者要孩子</td>
+</tr>
+<tr>
+<td>53</td>
+<td>此文一出，又有许多亲戚纷纷致电慰问，毕竟劳心费力花了钱，我方母子还受一肚子冤枉气，被三观不正的一家指责的一塌糊涂，我方亲戚也替我方愤愤不平，众多亲戚建议我方上诉</td>
+</tr>
+<tr>
+<td>54</td>
+<td>因临近春节且受疫情感染干扰，我方一直在忍</td>
+</tr>
+<tr>
+<td>55</td>
+<td>春节期间事情悬而未决但对方及其亲戚对外却声称已与我方两清</td>
+</tr>
+<tr>
+<td>56</td>
+<td>春节过后，我方在家人及亲戚的说教下，终于准备拿起法律武器洗刷委屈</td>
+</tr>
+<tr>
+<td>57</td>
+<td>我方先是发布《致她妈的一封讨要彩礼信》以及一个8分钟33秒的讨要彩礼视频，警告油盐不进的对方坐下来协商解决问题不然就会走法律程序</td>
+</tr>
+<tr>
+<td>58</td>
+<td>因“讨要彩礼信件和视频内容”触目惊心，对方开始慌了，指责我方有心机并不断搜集对我方不利的证据，对方弟弟言语侮辱挑衅我方“窝囊废、不敢出面解决问题、有种发自己的聊天记录、法院见、跳梁小丑”</td>
+</tr>
+<tr>
+<td>59</td>
+<td>两周内未收到对方反馈我方提起诉讼并于2023年3月9日开庭</td>
+</tr>
+<tr>
+<td>60</td>
+<td>庭审中，对方挺着大肚子即将分娩、独占庭审陈述时间作虚假陈述、精心刻录光盘作证、提交大量产检及早产单据作证、法官临近下班我方最后没有做陈述</td>
+</tr>
+<tr>
+<td>61</td>
+<td>对方法庭上的虚假陈述：“只要原告在瑞昌就会在一起生活并且发性行为”、“我只是发发小脾气哄一下就好了”、“为了孩子我还幻想着双方好好相处”、“2022年9月15日是原告先提出解除婚约退彩礼”、“鉴于前述事实我还在幻想和好能给孩子一个完整的家”，这种种虚假陈述，对方内心不是一般的强大。整整半年多，但凡对方释放出一丁点“善意”的信号，也不会是这种结局收场，其实对方就是故意在法庭上谎话连篇，藐视公堂。</td>
+</tr>
+<tr>
+<td>62</td>
+<td>预产期2023年4月14日左右，2023年3月25日对方产子</td>
+</tr>
+<tr>
+<td>63</td>
+<td>2023年3月29日判决书下达，判决对方退回彩礼80%并退回全部金饰，对方从拒绝协商一分不肯退到被判退回80%及全部金饰，我方彻底胜诉</td>
+</tr>
+<tr>
+<td>64</td>
+<td>对方的嚣张气焰被法院浇灭</td>
+</tr>
+<tr>
+<td>65</td>
+<td>在对方即将分娩的情况下80%这么高的比例再次说明对方在法庭上是谎话连篇</td>
+</tr>
+</tbody>
+</table>
+
+</body>
+</html>
